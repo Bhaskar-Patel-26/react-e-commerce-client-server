@@ -1,7 +1,14 @@
+import { Outlet } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import './App.css'
+
 function App() {
   return (
-    <div className="text-3xl font-bold underline">Hello Bhaskar</div>
-  )
+    <>
+      <Navbar />
+      <Outlet />
+    </>
+  );
 }
 
 export default App;
