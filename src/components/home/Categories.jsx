@@ -13,13 +13,26 @@ const Categories = () => {
     { name: "Cosmetics", path: "cosmetics", image: category4 },
   ];
   return (
-    <div className="product__grid">
-      {categories.map((category) => (
-        <Link key={category.path} to={`/categories/${category.path}`} className="categories__card" >
-          <img src={category.image} alt={category.name} />
-        </Link>
-      ))}
-    </div>
+    <>
+      <div className="pt-28">
+        <h2 className="section__header">Products Categories</h2>
+        <p className="section__subheader">
+          Discover The Hottest Picks: Elevate your style with our curated
+          collection of Tranding women's fashion products.
+        </p>
+      </div>
+      <div  className="product__grid">
+        {categories.map((category) => (
+          <Link
+            key={category.path}
+            to={`/categories/${category.path}`}
+            className="categories__card"
+          >
+            <img src={category.image} alt={category.name} />
+          </Link>
+        ))}
+      </div>
+    </>
   );
 };
 
