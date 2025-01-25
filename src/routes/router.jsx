@@ -3,6 +3,7 @@ import App from "../App";
 import HomePage from "../pages/HomePage";
 import CategoryPage from "../pages/CategoryPage";
 import SearchPage from "../pages/SearchPage";
+import ShopPage from "../pages/ShopPage";
 
 const router = createBrowserRouter([
   {
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/shop",
-        element: <div>Shop Page</div>,
+        element: <ShopPage />,
       },
       {
         path: "/blog",
