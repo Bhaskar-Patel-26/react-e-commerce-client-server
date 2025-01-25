@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import HomePage from "../pages/HomePage";
 import CategoryPage from "../pages/CategoryPage";
+import SearchPage from "../pages/SearchPage";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
       {
         path: "/categories/:categoryName",
         element: <CategoryPage />,
+      },
+      {
+        path: "/search",
+        element: <SearchPage />,
       },
       {
         path: "/shop",

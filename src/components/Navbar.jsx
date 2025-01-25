@@ -18,7 +18,7 @@ const Navbar = () => {
         </ul>
         
         <div className="nav__icons relative">
-            <Link className="hover:text-primary">
+            <Link to="/search" className="hover:text-primary">
                 <i className="ri-search-line"></i>
             </Link>
             <button className="hover:text-primary">
