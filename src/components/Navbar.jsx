@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { isCookie, Link, NavLink } from "react-router-dom";
+import CartModal from "./shop/CartModal";
 
 const Navbar = () => {
-  const products = useSelector((state) => state.cart.products)
+  const products = useSelector((state) => state.cart.products);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const handleCartToggle = () => {
+    setIsCartOpen(!isCartOpen)
+  }
   return (
     <header className="fixed-nav-bar w-nav">
       <nav className="max-w-screen-2xl mx-aut0 px-4 flex justify-between items-center">
@@ -23,17 +29,21 @@ const Navbar = () => {
             <Link to="/search" className="hover:text-primary">
                 <i className="ri-search-line"></i>
             </Link>
-            <button className="hover:text-primary">
+            <button onClick={handleCartToggle} className="hover:text-primary">
             <i className="ri-shopping-bag-line"></i>
             <sup className="text-sm inline-block px-1.5 text-white rounded-full bg-primary text-center">
                 {products.length}
             </sup>
             </button>
-            <Link className="hover:text-primary">
+            <Link to="/login" className="hover:text-primary">
                 <i className="ri-user-line"></i>
             </Link>
         </div>
       </nav>
+
+      {
+        isCartOpen && <CartModal products={products} isCartOpen={isCartOpen} onClose={handleCartToggle} />
+      }
     </header>
   );
 };

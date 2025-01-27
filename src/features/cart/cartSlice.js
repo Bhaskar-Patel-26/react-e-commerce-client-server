@@ -4,7 +4,7 @@ const initialState = {
   products: [],
   selectedItems: [],
   totalPrice: 0,
-  grantTotal: 0,
+  grandTotal: 0,
   tax: 0,
   taxRate: 0.05,
 };
@@ -25,7 +25,7 @@ export const cartSlice = createSlice({
       state.selectedItems = setSelectedItems(state);
       state.totalPrice = setTotalPrice(state);
       state.tax = setTax(state);
-      state.grantTotal = setGrandTotal(state);
+      state.grandTotal = setGrandTotal(state);
     },
   },
 });
@@ -34,12 +34,12 @@ export const cartSlice = createSlice({
 export const setSelectedItems = (state) =>
   state.products.reduce((total, product) => {
     return Number(total + product.quantity);
-  });
+  }, 0);
 
 export const setTotalPrice = (state) =>
   state.products.reduce((total, product) => {
     return Number(total + product.quantity * product.price);
-  });
+  }, 0);
 
 export const setTax = (state) => setTotalPrice(state) * state.taxRate;
 
