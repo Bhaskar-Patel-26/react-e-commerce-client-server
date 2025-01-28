@@ -5,6 +5,8 @@ import CategoryPage from "../pages/CategoryPage";
 import SearchPage from "../pages/SearchPage";
 import ShopPage from "../pages/ShopPage";
 import SingleProduct from "../components/shop/SingleProduct";
+import LoginPage from "../pages/LoginPage";
+import RegisterPage from "../pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
         element: <div>Contact Page</div>,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <LoginPage />
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />
   },
 ]);
 
