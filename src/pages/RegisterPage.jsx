@@ -1,15 +1,29 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useRegisterUserMutation } from "../features/auth/authAPI";
 
 const RegisterPage = () => {
   const [message, setMessage] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch();
+  const [registerUser, { isLoading: loginLoading }] = useRegisterUserMutation();
+  const navigate = useNavigate();
+
   const handleRegister = async (e) => {
     e.preventDefault();
     const data = { username, email, password };
-    console.log(data);
+    try {
+      await registerUser(data).unwrap();
+      alert("User registration successful")
+      navigate("/login")
+    } catch (error) {
+      setMessage('Registration failed')
+      console.log(error);
+    }
   };
   return (
     <div>
