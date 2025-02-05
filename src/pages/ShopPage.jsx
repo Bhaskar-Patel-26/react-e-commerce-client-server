@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import productsData from "../data/products.json";
 import ProductCards from "../components/shop/ProductCards";
 import ShopFilters from "../components/shop/ShopFilters";
+import { useFetchAllProductsQuery } from "../features/products/productsAPI";
 
 const filters = {
   categories: ["all", "accessories", "dress", "jewellery", "cosmetics"],
@@ -15,48 +15,26 @@ const filters = {
 };
 
 const ShopPage = () => {
-  const [products, setProducts] = useState(productsData);
   const [filtersState, setFiltersState] = useState({
     category: "all",
     color: "all",
     priceRange: "",
   });
 
-  // Filtering function
-  const applyFilters = () => {
-    let filteredProducts = productsData;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productPerPage] = useState(8);
 
-    // Filter by category
-    if (filtersState.category && filtersState.category !== "all") {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.category === filtersState.category
-      );
-    }
+  const { category, color, priceRange } = filtersState;
+  const [minPrice, maxPrice] = priceRange.split("-").map(Number);
 
-    // Filter by color
-    if (filtersState.color && filtersState.color !== "all") {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.color === filtersState.color
-      );
-    }
-
-    // Filter by price range
-    if (filtersState.priceRange) {
-      const [minPrice, maxPrice] = filtersState.priceRange
-        .split("-")
-        .map(Number);
-      filteredProducts = filteredProducts.filter(
-        (product) => product.price >= minPrice && product.price <= maxPrice
-      );
-      console.log(minPrice, maxPrice, filteredProducts)
-    }
-    
-    setProducts(filteredProducts);
-  };
-
-  useEffect(() => {
-    applyFilters();
-  }, [filtersState]);
+  const { data: { products = [], totalPages, totalProducts } = {}, error, isLoading} = useFetchAllProductsQuery({
+    category: category !== "all" ? category : "",
+    color: color !== "all" ? color : "",
+    minPrice: isNaN(minPrice) ? "" : minPrice,
+    maxPrice: isNaN(maxPrice) ? "" : maxPrice,
+    page: currentPage,
+    limit: productPerPage,
+  });
 
   // Clear the filters
   const clearFIlters = () => {
@@ -66,6 +44,18 @@ const ShopPage = () => {
       priceRange: "",
     });
   };
+
+  const handlePageChange = (pageNumber) => {
+    if(pageNumber>0 && pageNumber <= totalPages){
+      setCurrentPage(pageNumber)
+    }
+  }
+
+  const startProduct = (currentPage-1) * productPerPage+1;
+  const endProduct = startProduct + products.length-1;
+
+  if(isLoading) return <div>Loading...</div>
+  if(error) return <div>Error while loading products</div>
 
   return (
     <>
@@ -91,8 +81,21 @@ const ShopPage = () => {
 
           {/* Products */}
           <div>
-            <h3 className="text-xl font-medium mb-4">Products Available: {products.length}</h3>
+            <h3 className="text-xl font-medium mb-4">
+              Showing {startProduct} to {endProduct} of {totalProducts} products.
+            </h3>
             <ProductCards products={products} />
+
+            {/* Pagination */}
+            <div className="mt-6 flex justify-center">
+              <button onClick={()=> handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Previous</button>
+              {
+                [...Array(totalPages)].map((_, index) => {
+                  <button onClick={()=> handlePageChange(index + 1)} key={index} className={`px-4 py-2 ${currentPage === index+1 ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'} rounded-md mx-1` }>{index+1}</button>
+                })
+              }
+              <button onClick={()=> handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Next</button>
+            </div>
           </div>
         </div>
       </section>
