@@ -1,8 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import img from '../../assets/instagram-6.jpg';
 import RatingStars from "../RatingStars";
+import ReviewsCard from "../reviews/ReviewsCard";
+import { useGetReviewsByUserIdQuery } from "../../features/reviews/reviewsAPI";
 
 const SingleProduct = () => {
+  const {id} = useParams();
+  const dispatch = useDispatch();
+  // const {data, error, isLoading} = useGetReviewsByUserIdQuery(id);
+  let data = {};
+  const singleProduct = data?.product || {};
+  const productReviews = data?.reviews || [];
+
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product))
+  }
+
+  // if(isLoading) return <p>Loading...</p>
+  // if(error) return <p>Error loading product details</p>
+
   return (
     <>
       <section className="section__container bg-primary-light">
@@ -45,7 +62,7 @@ const SingleProduct = () => {
       {/* Reviews */}
       {/* TODO: Work with review when will have API */}
       <section className="section__container">
-        Reviews Here
+        <ReviewsCard productReviews = {productReviews} />
       </section>
     </>
   );
